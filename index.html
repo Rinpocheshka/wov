@@ -1047,19 +1047,7 @@
     setTimeout(typeChar, 500);
   })();
 
-  // ========== 3. GLITCH ON SCROLL (Intersection Observer) ==========
-  (function() {
-    const sections = document.querySelectorAll('.glitch-section');
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          entry.target.classList.add('glitching');
-          setTimeout(() => entry.target.classList.remove('glitching'), 200);
-        }
-      });
-    }, { threshold: 0.3 });
-    sections.forEach(s => observer.observe(s));
-  })();
+  // ========== 3. GLITCH ON SCROLL - REMOVED ==========
 
   // ========== 4. 3D PERSPECTIVE ON SERVICE CARDS ==========
   (function() {
