@@ -358,6 +358,13 @@
     display: block;
     border-bottom: 3px solid var(--accent);
     padding-bottom: 4px;
+    position: relative;
+  }
+  .section-label::after {
+    content: "▌";
+    display: inline-block; margin-left: 8px; vertical-align: middle;
+    animation: blink 1s step-end infinite;
+    color: var(--accent);
   }
   .section-title {
     font-family: var(--font-mono); font-weight: bold;
