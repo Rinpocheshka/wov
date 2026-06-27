@@ -946,21 +946,23 @@
     if (!el) return;
     const fullText = el.dataset.text;
     const cursor = el.querySelector('.typing-cursor');
+    // Clear and keep cursor
     el.textContent = '';
     el.appendChild(cursor);
 
     let audioCtx = null;
     function getAudio() {
       if (!audioCtx) {
-        audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        try { audioCtx = new (window.AudioContext || window.webkitAudioContext)(); } catch(e) { return null; }
       }
       if (audioCtx.state === 'suspended') audioCtx.resume();
       return audioCtx;
     }
 
     function playKey() {
+      const ctx = getAudio();
+      if (!ctx) return;
       try {
-        const ctx = getAudio();
         const osc = ctx.createOscillator();
         const gain = ctx.createGain();
         osc.connect(gain);
@@ -983,16 +985,8 @@
         setTimeout(typeChar, 60 + Math.random() * 40);
       }
     }
-    // Wait for first user interaction to enable audio
-    function startTyping() {
-      setTimeout(typeChar, 300);
-      document.removeEventListener('click', startTyping);
-      document.removeEventListener('keydown', startTyping);
-      document.removeEventListener('touchstart', startTyping);
-    }
-    document.addEventListener('click', startTyping);
-    document.addEventListener('keydown', startTyping);
-    document.addEventListener('touchstart', startTyping);
+    // Start typing immediately (sound will work after first interaction)
+    setTimeout(typeChar, 500);
   })();
 
   // ========== 3. GLITCH ON SCROLL - REMOVED ==========
