@@ -18,6 +18,7 @@
     --accent-3: #FFD600;
     --accent-4: #2979FF;
     --accent-ff: #FF00FF;
+    --accent-text: #0A0A0A;
     --shadow: 6px 6px 0px #0A0A0A;
     --shadow-sm: 3px 3px 0px #0A0A0A;
     --shadow-lg: 10px 10px 0px #0A0A0A;
@@ -64,7 +65,7 @@
   /* ---------- THEME TOGGLE (BRUTAL BUTTON) ---------- */
   .theme-toggle {
     width: 44px; height: 44px;
-    background: var(--accent-3);
+    background: var(--accent-3); color: var(--accent-text);
     border: 3px solid var(--border);
     box-shadow: var(--shadow-sm);
     cursor: pointer;
@@ -121,7 +122,8 @@
     display: inline-block;
     font-family: var(--font-mono); font-size: 12px; font-weight: bold;
     letter-spacing: 2px; text-transform: uppercase;
-    background: var(--accent-3); border: 3px solid var(--border);
+    background: var(--accent-3); color: var(--accent-text);
+    border: 3px solid var(--border);
     padding: 6px 16px; margin-bottom: 24px;
   }
   .hero-line {
@@ -144,7 +146,7 @@
   }
   .hero-subline em {
     font-style: normal;
-    color: var(--ink);
+    color: var(--accent-text);
     background: var(--accent-3);
     padding: 2px 10px;
   }
@@ -229,7 +231,7 @@
     box-shadow: var(--shadow-lg);
   }
   .contrast-table .col-old { padding: 28px 24px; background: var(--surface); }
-  .contrast-table .col-new { padding: 28px 24px; background: var(--accent-2); }
+  .contrast-table .col-new { padding: 28px 24px; background: var(--accent-2); color: var(--accent-text); }
   .contrast-table .col-vs {
     display: flex; align-items: center; justify-content: center;
     background: var(--accent);
@@ -296,7 +298,7 @@
   .service-card p { font-size: 14px; color: var(--ink-muted); line-height: 1.6; flex-grow: 1; }
   .service-card .card-tag {
     font-family: var(--font-mono); font-size: 11px; font-weight: bold;
-    color: var(--ink); background: var(--accent-3);
+    color: var(--accent-text); background: var(--accent-3);
     border: 2px solid var(--border);
     padding: 4px 12px; align-self: flex-start;
     text-transform: uppercase; letter-spacing: 1px;
@@ -319,6 +321,7 @@
     transform: translate(-2px, -2px);
     box-shadow: 5px 5px 0px var(--border);
     background: var(--accent-3);
+    color: var(--accent-text);
   }
   .tech-badge strong {
     display: block;
@@ -333,15 +336,16 @@
     box-shadow: var(--shadow);
     padding: 28px 32px;
     display: flex; gap: 20px; align-items: flex-start;
+    color: var(--accent-text);
   }
   .quality-callout .qc-icon {
     font-size: 32px; flex-shrink: 0; line-height: 1;
   }
   .quality-callout h4 {
     font-family: var(--font-mono); font-weight: bold; font-size: 18px;
-    color: var(--ink); margin-bottom: 8px; text-transform: uppercase;
+    color: var(--accent-text); margin-bottom: 8px; text-transform: uppercase;
   }
-  .quality-callout p { font-size: 14px; color: var(--ink); line-height: 1.6; }
+  .quality-callout p { font-size: 14px; color: var(--accent-text); line-height: 1.6; }
 
   /* ---------- TIMELINE ---------- */
   .timeline { margin-top: 48px; position: relative; padding-left: 40px; }
@@ -387,7 +391,7 @@
     align-items: center; text-transform: uppercase;
     transition: background 0.1s;
   }
-  .faq-item summary:hover { background: var(--accent-3); }
+  .faq-item summary:hover { background: var(--accent-3); color: var(--accent-text); }
   .faq-item summary::-webkit-details-marker { display: none; }
   .faq-item summary::after {
     content: "+"; font-family: var(--font-mono); font-size: 22px;
