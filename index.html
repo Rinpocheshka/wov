@@ -445,18 +445,6 @@
     position: absolute; inset: 0; width: 100%; height: 100%;
   }
 
-  /* ---------- CURSOR PARTICLES ---------- */
-  .particle {
-    position: fixed; pointer-events: none; z-index: 9999;
-    width: 8px; height: 8px;
-    border: 2px solid var(--border);
-    animation: particleFly 0.7s ease-out forwards;
-  }
-  @keyframes particleFly {
-    0% { opacity: 1; transform: translate(0, 0) scale(1) rotate(0deg); }
-    100% { opacity: 0; transform: translate(var(--tx), var(--ty)) scale(0) rotate(720deg); }
-  }
-
   /* ---------- TYPING CURSOR ---------- */
   .typing-cursor {
     display: inline-block;
@@ -718,26 +706,7 @@
     letter-spacing: 1px; text-transform: uppercase;
   }
 
-  /* ---------- PIXEL CAT ---------- */
-  .pixel-cat {
-    position: fixed; top: 12px; left: -60px; z-index: 101;
-    font-size: 28px; line-height: 1;
-    animation: catRun 12s linear infinite;
-    pointer-events: none;
-    filter: drop-shadow(2px 2px 0px var(--border));
-  }
-  .cat-body {
-    display: inline-block;
-    animation: catHop 0.3s steps(2) infinite;
-  }
-  @keyframes catRun {
-    0% { left: -60px; }
-    100% { left: calc(100% + 60px); }
-  }
-  @keyframes catHop {
-    0%, 100% { transform: translateY(0) scaleX(1); }
-    50% { transform: translateY(-4px) scaleX(1.05); }
-  }
+  /* ---------- RESPONSIVE ---------- */
   @media (max-width: 860px) {
     .contrast-table { grid-template-columns: 1fr; }
     .contrast-table .col-vs { writing-mode: horizontal-tb; padding: 14px; }
@@ -751,6 +720,7 @@
     .footer-cta { margin: 0 16px 48px; padding: 48px 20px; }
     nav { padding: 14px 20px; }
     .logo-text { font-size: 16px; }
+  }
   }
   @media (max-width: 520px) {
     .tech-grid { grid-template-columns: repeat(2, 1fr); }
@@ -768,11 +738,6 @@
 
 <!-- NEON GRID -->
 <div class="neon-grid"><canvas id="neonCanvas"></canvas></div>
-
-<!-- PIXEL CAT -->
-<div class="pixel-cat" id="pixelCat">
-  <span class="cat-body">🐱</span>
-</div>
 
 <!-- NAV -->
 <nav>
@@ -988,27 +953,7 @@
     document.documentElement.setAttribute('data-theme', theme);
   })();
 
-  // ========== 1. CURSOR PARTICLE EXPLOSION ==========
-  (function() {
-    const colors = ['#FF5C00', '#00C853', '#FFD600', '#2979FF', '#FF00FF', '#000000', '#FFFFFF'];
-    document.addEventListener('click', function(e) {
-      for (let i = 0; i < 12; i++) {
-        const p = document.createElement('div');
-        p.className = 'particle';
-        p.style.left = e.clientX + 'px';
-        p.style.top = e.clientY + 'px';
-        p.style.background = colors[Math.floor(Math.random() * colors.length)];
-        const angle = (Math.PI * 2 * i) / 12;
-        const dist = 40 + Math.random() * 60;
-        p.style.setProperty('--tx', Math.cos(angle) * dist + 'px');
-        p.style.setProperty('--ty', Math.sin(angle) * dist + 'px');
-        p.style.width = (4 + Math.random() * 8) + 'px';
-        p.style.height = p.style.width;
-        document.body.appendChild(p);
-        setTimeout(() => p.remove(), 700);
-      }
-    });
-  })();
+  // ========== 1. CURSOR PARTICLES - REMOVED ==========
 
   // ========== 2. TYPING ANIMATION + KEYBOARD SOUND ==========
   (function() {
