@@ -436,9 +436,56 @@
   .contrast-table .col-old .icon { background: var(--accent); color: #FFF; }
   .contrast-table .col-new .icon { background: var(--accent-3); color: var(--ink); }
 
-  /* ---------- SERVICES ---------- */
+  /* ---------- NEON GRID BACKGROUND ---------- */
+  .neon-grid {
+    position: fixed; inset: 0; z-index: 0; pointer-events: none;
+    overflow: hidden;
+  }
+  .neon-grid canvas {
+    position: absolute; inset: 0; width: 100%; height: 100%;
+  }
+
+  /* ---------- CURSOR PARTICLES ---------- */
+  .particle {
+    position: fixed; pointer-events: none; z-index: 9999;
+    width: 8px; height: 8px;
+    border: 2px solid var(--border);
+    animation: particleFly 0.7s ease-out forwards;
+  }
+  @keyframes particleFly {
+    0% { opacity: 1; transform: translate(0, 0) scale(1) rotate(0deg); }
+    100% { opacity: 0; transform: translate(var(--tx), var(--ty)) scale(0) rotate(720deg); }
+  }
+
+  /* ---------- TYPING CURSOR ---------- */
+  .typing-cursor {
+    display: inline-block;
+    width: 3px; height: 1em;
+    background: var(--accent);
+    margin-left: 4px;
+    vertical-align: text-bottom;
+    animation: blink 0.7s step-end infinite;
+  }
+
+  /* ---------- GLITCH ON SCROLL ---------- */
+  .glitch-section {
+    transition: filter 0.1s;
+  }
+  .glitch-section.glitching {
+    animation: glitchSection 0.15s steps(2) forwards;
+  }
+  @keyframes glitchSection {
+    0% { filter: none; transform: translateX(0); }
+    20% { filter: hue-rotate(90deg) saturate(2); transform: translateX(-5px); }
+    40% { filter: hue-rotate(-90deg); transform: translateX(5px) skewX(2deg); }
+    60% { filter: hue-rotate(180deg); transform: translateX(-3px); }
+    80% { filter: none; transform: translateX(2px); }
+    100% { filter: none; transform: translateX(0); }
+  }
+
+  /* ---------- 3D CARD PERSPECTIVE ---------- */
   .services-grid {
-    display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; margin-top: 48px;
+    perspective: 1000px;
   }
   .service-card {
     background: var(--surface);
@@ -448,6 +495,7 @@
     display: flex; flex-direction: column; gap: 14px;
     transition: transform 0.15s, box-shadow 0.15s;
     position: relative;
+    transform-style: preserve-3d;
   }
   .service-card::before {
     content: "";
@@ -669,7 +717,26 @@
     letter-spacing: 1px; text-transform: uppercase;
   }
 
-  /* ---------- RESPONSIVE ---------- */
+  /* ---------- PIXEL CAT ---------- */
+  .pixel-cat {
+    position: fixed; top: 12px; left: -60px; z-index: 101;
+    font-size: 28px; line-height: 1;
+    animation: catRun 12s linear infinite;
+    pointer-events: none;
+    filter: drop-shadow(2px 2px 0px var(--border));
+  }
+  .cat-body {
+    display: inline-block;
+    animation: catHop 0.3s steps(2) infinite;
+  }
+  @keyframes catRun {
+    0% { left: -60px; }
+    100% { left: calc(100% + 60px); }
+  }
+  @keyframes catHop {
+    0%, 100% { transform: translateY(0) scaleX(1); }
+    50% { transform: translateY(-4px) scaleX(1.05); }
+  }
   @media (max-width: 860px) {
     .contrast-table { grid-template-columns: 1fr; }
     .contrast-table .col-vs { writing-mode: horizontal-tb; padding: 14px; }
@@ -698,6 +765,14 @@
 <div class="deco deco-3">///</div>
 <div class="deco deco-4">&lt;/&gt;</div>
 
+<!-- NEON GRID -->
+<div class="neon-grid"><canvas id="neonCanvas"></canvas></div>
+
+<!-- PIXEL CAT -->
+<div class="pixel-cat" id="pixelCat">
+  <span class="cat-body">🐱</span>
+</div>
+
 <!-- NAV -->
 <nav>
   <div class="logo-group">
@@ -714,10 +789,10 @@
 </nav>
 
 <!-- SECTION 1: HERO -->
-<section class="hero">
+<section class="hero glitch-section">
   <div class="hero-inner">
     <div class="hero-eyebrow">AI-Assisted Development Studio</div>
-    <span class="hero-line" data-text="Разработка со скоростью мысли.">Разработка со скоростью мысли.</span>
+    <span class="hero-line" id="typingLine" data-text="Разработка со скоростью мысли.">Разработка со скоростью мысли.<span class="typing-cursor"></span></span>
     <span class="hero-subline" data-text="Соберём ваш MVP за 5 дней">Соберём ваш <em>MVP за 5 дней</em><br>с помощью ИИ-инженеров.</span>
     <p class="subtitle">Мы не пишем код построчно — мы оркестрируем агентов, фреймворки и LLM-пайплайны, чтобы вы получили работающий продукт за дни, а не месяцы. Человеческая экспертиза + машинная скорость.</p>
     <div class="cta-row">
@@ -736,7 +811,7 @@
 </div>
 
 <!-- SECTION 2: CONTRAST -->
-<section>
+<section class="glitch-section">
   <div class="section-label">// Почему не классическая разработка</div>
   <h2 class="section-title">Классический аутсорсинг умирает.<br>Вот что приходит на смену.</h2>
   <p class="section-desc">Сравните два подхода к одному и тому же проекту. Разница — в скорости, предсказуемости и итоговом счёте.</p>
@@ -769,7 +844,7 @@
 </section>
 
 <!-- SECTION 3: SERVICES & PRICING -->
-<section id="services">
+<section id="services" class="glitch-section">
   <div class="section-label">// Услуги и тарифы</div>
   <h2 class="section-title">Три формата под разные задачи</h2>
   <p class="section-desc">Выберите путь, который соответствует вашему этапу. Каждый пакет — фиксированный срок и предсказуемый результат.</p>
@@ -797,7 +872,7 @@
 </section>
 
 <!-- SECTION 4: TECH STACK & QUALITY -->
-<section>
+<section class="glitch-section">
   <div class="section-label">// Стек и контроль качества</div>
   <h2 class="section-title">Современный стек. Чистый код.<br>Реальная гарантия качества.</h2>
   <p class="section-desc">AI позволяет нам использовать лучшие инструменты без компромиссов. Каждая строка кода проходит аудит, рефакторинг и тестирование перед деплоем.</p>
@@ -820,7 +895,7 @@
 </section>
 
 <!-- SECTION 5: HOW WE WORK -->
-<section>
+<section class="glitch-section">
   <div class="section-label">// Процесс работы</div>
   <h2 class="section-title">От идеи до деплоя за 5 дней</h2>
   <p class="section-desc">Никаких недель молчания и сюрпризов на дедлайне. Прозрачный процесс с live-апдейтами каждый день.</p>
@@ -845,7 +920,7 @@
 </section>
 
 <!-- SECTION 6: FAQ -->
-<section>
+<section class="glitch-section">
   <div class="section-label">// FAQ</div>
   <h2 class="section-title">Честные ответы на частые вопросы</h2>
 
@@ -912,42 +987,181 @@
     document.documentElement.setAttribute('data-theme', theme);
   })();
 
-  // --- Form validation & security ---
+  // ========== 1. CURSOR PARTICLE EXPLOSION ==========
+  (function() {
+    const colors = ['#FF5C00', '#00C853', '#FFD600', '#2979FF', '#FF00FF', '#000000', '#FFFFFF'];
+    document.addEventListener('click', function(e) {
+      for (let i = 0; i < 12; i++) {
+        const p = document.createElement('div');
+        p.className = 'particle';
+        p.style.left = e.clientX + 'px';
+        p.style.top = e.clientY + 'px';
+        p.style.background = colors[Math.floor(Math.random() * colors.length)];
+        const angle = (Math.PI * 2 * i) / 12;
+        const dist = 40 + Math.random() * 60;
+        p.style.setProperty('--tx', Math.cos(angle) * dist + 'px');
+        p.style.setProperty('--ty', Math.sin(angle) * dist + 'px');
+        p.style.width = (4 + Math.random() * 8) + 'px';
+        p.style.height = p.style.width;
+        document.body.appendChild(p);
+        setTimeout(() => p.remove(), 700);
+      }
+    });
+  })();
+
+  // ========== 2. TYPING ANIMATION + KEYBOARD SOUND ==========
+  (function() {
+    const el = document.getElementById('typingLine');
+    if (!el) return;
+    const fullText = el.dataset.text;
+    const cursor = el.querySelector('.typing-cursor');
+    // Start with empty text + cursor
+    el.textContent = '';
+    el.appendChild(cursor);
+
+    // Create keyboard click audio
+    const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    function playKey() {
+      const osc = audioCtx.createOscillator();
+      const gain = audioCtx.createGain();
+      osc.connect(gain);
+      gain.connect(audioCtx.destination);
+      osc.frequency.value = 800 + Math.random() * 400;
+      osc.type = 'square';
+      gain.gain.value = 0.03;
+      gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.05);
+      osc.start();
+      osc.stop(audioCtx.currentTime + 0.05);
+    }
+
+    let i = 0;
+    function typeChar() {
+      if (i < fullText.length) {
+        el.insertBefore(document.createTextNode(fullText[i]), cursor);
+        playKey();
+        i++;
+        setTimeout(typeChar, 60 + Math.random() * 40);
+      }
+    }
+    // Start typing after page load
+    setTimeout(typeChar, 500);
+  })();
+
+  // ========== 3. GLITCH ON SCROLL (Intersection Observer) ==========
+  (function() {
+    const sections = document.querySelectorAll('.glitch-section');
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('glitching');
+          setTimeout(() => entry.target.classList.remove('glitching'), 200);
+        }
+      });
+    }, { threshold: 0.3 });
+    sections.forEach(s => observer.observe(s));
+  })();
+
+  // ========== 4. 3D PERSPECTIVE ON SERVICE CARDS ==========
+  (function() {
+    const cards = document.querySelectorAll('.service-card');
+    cards.forEach(card => {
+      card.addEventListener('mousemove', function(e) {
+        const rect = this.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
+        const centerX = rect.width / 2;
+        const centerY = rect.height / 2;
+        const rotateX = ((y - centerY) / centerY) * -8;
+        const rotateY = ((x - centerX) / centerX) * 8;
+        this.style.transform = `perspective(800px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateZ(10px)`;
+      });
+      card.addEventListener('mouseleave', function() {
+        this.style.transform = 'perspective(800px) rotateX(0) rotateY(0) translateZ(0)';
+      });
+    });
+  })();
+
+  // ========== 5. NEON GRID CANVAS ==========
+  (function() {
+    const canvas = document.getElementById('neonCanvas');
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+    let w, h;
+    function resize() {
+      w = canvas.width = window.innerWidth;
+      h = canvas.height = window.innerHeight;
+    }
+    resize();
+    window.addEventListener('resize', resize);
+
+    const gridSize = 60;
+    let offset = 0;
+    const isDark = () => document.documentElement.getAttribute('data-theme') === 'dark';
+
+    function draw() {
+      ctx.clearRect(0, 0, w, h);
+      const lineColor = isDark() ? 'rgba(255,92,0,0.08)' : 'rgba(255,92,0,0.06)';
+      const dotColor = isDark() ? 'rgba(255,255,255,0.15)' : 'rgba(255,92,0,0.2)';
+
+      offset = (offset + 0.3) % gridSize;
+
+      ctx.strokeStyle = lineColor;
+      ctx.lineWidth = 1;
+      // Horizontal lines moving down
+      for (let y = offset; y < h; y += gridSize) {
+        ctx.beginPath();
+        ctx.moveTo(0, y);
+        ctx.lineTo(w, y);
+        ctx.stroke();
+      }
+      // Vertical lines
+      for (let x = 0; x < w; x += gridSize) {
+        ctx.beginPath();
+        ctx.moveTo(x, 0);
+        ctx.lineTo(x, h);
+        ctx.stroke();
+      }
+      // Intersection dots
+      ctx.fillStyle = dotColor;
+      for (let x = 0; x < w; x += gridSize) {
+        for (let y = offset; y < h; y += gridSize) {
+          ctx.beginPath();
+          ctx.arc(x, y, 2, 0, Math.PI * 2);
+          ctx.fill();
+        }
+      }
+      requestAnimationFrame(draw);
+    }
+    draw();
+  })();
+
+  // ========== 6. FORM VALIDATION & SECURITY ==========
   (function() {
     const form = document.getElementById('leadForm');
     const errorEl = document.getElementById('formError');
     if (!form) return;
 
-    // Sanitize: strip dangerous characters, truncate
     function sanitize(str, maxLen) {
-      // Remove null bytes, angle brackets, backticks, script/event handlers
       return str
-        .replace(/[\x00-\x08\x0B\x0C\x0E-\x1F]/g, '')   // control chars
-        .replace(/<[^>]*>/g, '')                          // HTML tags
-        .replace(/javascript:|data:|vbscript:/gi, '')    // XSS vectors
-        .replace(/on\w+\s*=/gi, '')                       // event handlers
-        .replace(/[\\`${}]/g, '')                         // template injection
+        .replace(/[\x00-\x08\x0B\x0C\x0E-\x1F]/g, '')
+        .replace(/<[^>]*>/g, '')
+        .replace(/javascript:|data:|vbscript:/gi, '')
+        .replace(/on\w+\s*=/gi, '')
+        .replace(/[\\`${}]/g, '')
         .trim()
         .slice(0, maxLen);
     }
 
-    // Enforce max length on paste (textarea)
     const ideaField = form.querySelector('[name="idea"]');
     if (ideaField) {
-      ideaField.addEventListener('paste', function(e) {
-        // Let the paste complete, then truncate
-        setTimeout(() => {
-          this.value = sanitize(this.value, 200);
-        }, 0);
+      ideaField.addEventListener('paste', function() {
+        setTimeout(() => { this.value = sanitize(this.value, 200); }, 0);
       });
       ideaField.addEventListener('input', function() {
-        if (this.value.length > 200) {
-          this.value = sanitize(this.value, 200);
-        }
+        if (this.value.length > 200) this.value = sanitize(this.value, 200);
       });
     }
 
-    // Real-time sanitization for contact field (strip invalid chars on input)
     const contactField = form.querySelector('[name="contact"]');
     if (contactField) {
       contactField.addEventListener('input', function() {
@@ -956,7 +1170,6 @@
       });
     }
 
-    // Real-time sanitization for name field
     const nameField = form.querySelector('[name="name"]');
     if (nameField) {
       nameField.addEventListener('input', function() {
@@ -968,41 +1181,19 @@
     form.addEventListener('submit', function(e) {
       e.preventDefault();
       errorEl.textContent = '';
-
-      // Get and sanitize values
       const name = sanitize(form.querySelector('[name="name"]').value, 35);
       const contact = sanitize(form.querySelector('[name="contact"]').value, 30);
       const idea = sanitize(form.querySelector('[name="idea"]').value, 200);
-
-      // Server-side-equivalent validation (defense in depth)
       const namePattern = /^[A-Za-zА-Яа-яЁё\s]{2,35}$/;
       const contactPattern = /^[A-Za-z0-9@._+\-]{3,30}$/;
-
-      if (!namePattern.test(name)) {
-        errorEl.textContent = 'Имя: только буквы и пробел, 2-35 символов';
-        return;
-      }
-      if (!contactPattern.test(contact)) {
-        errorEl.textContent = 'Контакт: латиница, цифры, @._+-, 3-30 символов';
-        return;
-      }
-      if (idea.length < 5) {
-        errorEl.textContent = 'Опишите идею подробнее (минимум 5 символов)';
-        return;
-      }
-      if (idea.length > 200) {
-        errorEl.textContent = 'Описание слишком длинное (макс. 200 символов)';
-        return;
-      }
-
-      // Check for suspicious patterns (injection attempts)
+      if (!namePattern.test(name)) { errorEl.textContent = 'Имя: только буквы и пробел, 2-35 символов'; return; }
+      if (!contactPattern.test(contact)) { errorEl.textContent = 'Контакт: латиница, цифры, @._+-, 3-30 символов'; return; }
+      if (idea.length < 5) { errorEl.textContent = 'Опишите идею подробнее (минимум 5 символов)'; return; }
+      if (idea.length > 200) { errorEl.textContent = 'Описание слишком длинное (макс. 200 символов)'; return; }
       const dangerPatterns = /(<script|<\/script|eval\s*\(|document\.|window\.|fetch\s*\(|XMLHttpRequest)/i;
       if (dangerPatterns.test(name) || dangerPatterns.test(contact) || dangerPatterns.test(idea)) {
-        errorEl.textContent = 'Обнаружен недопустимый контент';
-        return;
+        errorEl.textContent = 'Обнаружен недопустимый контент'; return;
       }
-
-      // Success — in production, send to backend here
       form.reset();
       errorEl.textContent = '';
       alert('Спасибо! Мы свяжемся с вами в ближайшие часы.');
