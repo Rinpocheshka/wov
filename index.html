@@ -427,15 +427,25 @@
     display: grid; grid-template-columns: 1fr 1fr 1.5fr; gap: 12px;
     max-width: 680px; margin: 0 auto;
   }
-  .cta-form input {
+  .cta-form input, .cta-form textarea {
     background: var(--cta-input-bg);
     border: 3px solid var(--cta-input-border);
     padding: 14px 16px;
     font-family: var(--font-mono); font-size: 14px; color: var(--cta-text);
     outline: none; transition: border-color 0.2s;
+    resize: vertical;
   }
-  .cta-form input::placeholder { color: var(--cta-text); opacity: 0.4; }
-  .cta-form input:focus { border-color: var(--accent); }
+  .cta-form input::placeholder, .cta-form textarea::placeholder { color: var(--cta-text); opacity: 0.4; }
+  .cta-form input:focus, .cta-form textarea:focus { border-color: var(--accent); }
+  .cta-form input:invalid:not(:placeholder-shown), .cta-form textarea:invalid:not(:placeholder-shown) {
+    border-color: var(--accent);
+  }
+  .form-error {
+    grid-column: 1 / -1;
+    font-family: var(--font-mono); font-size: 12px; font-weight: bold;
+    color: var(--accent); text-transform: uppercase; letter-spacing: 1px;
+    min-height: 20px; padding: 8px 0;
+  }
   .cta-form button {
     grid-column: 1 / -1;
     background: var(--accent); color: #FFFFFF;
@@ -655,11 +665,17 @@
 <div id="cta" class="footer-cta">
   <h2>Хватит планировать.<br>Пора деплоить.</h2>
   <p>Расскажите о вашей идее — ответим в течение 2 часов, предложим план и смету.</p>
-  <form class="cta-form" onsubmit="event.preventDefault(); alert('Спасибо! Мы свяжемся с вами в ближайшие часы.');">
-    <input type="text" placeholder="Ваше имя" required>
-    <input type="text" placeholder="Telegram или Email" required>
-    <input type="text" placeholder="Коротко опишите идею" required>
+  <form class="cta-form" id="leadForm" novalidate>
+    <input type="text" name="name" placeholder="Ваше имя" maxlength="35" required
+           pattern="^[A-Za-zА-Яа-яЁё\s]{1,35}$" title="Только буквы и пробел, до 35 символов"
+           autocomplete="off" spellcheck="false">
+    <input type="text" name="contact" placeholder="Telegram или Email" maxlength="30" required
+           pattern="^[A-Za-z0-9@._+\-]{1,30}$" title="Латинские буквы, цифры, символы @._+-, до 30 символов"
+           autocomplete="off" spellcheck="false">
+    <textarea name="idea" placeholder="Коротко опишите идею" maxlength="200" required
+              rows="3" autocomplete="off" spellcheck="false"></textarea>
     <button type="submit">Отправить заявку →</button>
+    <div class="form-error" id="formError" role="alert"></div>
   </form>
 </div>
 
@@ -682,6 +698,103 @@
     const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
     const theme = saved || (prefersDark ? 'dark' : 'light');
     document.documentElement.setAttribute('data-theme', theme);
+  })();
+
+  // --- Form validation & security ---
+  (function() {
+    const form = document.getElementById('leadForm');
+    const errorEl = document.getElementById('formError');
+    if (!form) return;
+
+    // Sanitize: strip dangerous characters, truncate
+    function sanitize(str, maxLen) {
+      // Remove null bytes, angle brackets, backticks, script/event handlers
+      return str
+        .replace(/[\x00-\x08\x0B\x0C\x0E-\x1F]/g, '')   // control chars
+        .replace(/<[^>]*>/g, '')                          // HTML tags
+        .replace(/javascript:|data:|vbscript:/gi, '')    // XSS vectors
+        .replace(/on\w+\s*=/gi, '')                       // event handlers
+        .replace(/[\\`${}]/g, '')                         // template injection
+        .trim()
+        .slice(0, maxLen);
+    }
+
+    // Enforce max length on paste (textarea)
+    const ideaField = form.querySelector('[name="idea"]');
+    if (ideaField) {
+      ideaField.addEventListener('paste', function(e) {
+        // Let the paste complete, then truncate
+        setTimeout(() => {
+          this.value = sanitize(this.value, 200);
+        }, 0);
+      });
+      ideaField.addEventListener('input', function() {
+        if (this.value.length > 200) {
+          this.value = sanitize(this.value, 200);
+        }
+      });
+    }
+
+    // Real-time sanitization for contact field (strip invalid chars on input)
+    const contactField = form.querySelector('[name="contact"]');
+    if (contactField) {
+      contactField.addEventListener('input', function() {
+        const cleaned = this.value.replace(/[^A-Za-z0-9@._+\-]/g, '');
+        if (cleaned !== this.value) this.value = cleaned.slice(0, 30);
+      });
+    }
+
+    // Real-time sanitization for name field
+    const nameField = form.querySelector('[name="name"]');
+    if (nameField) {
+      nameField.addEventListener('input', function() {
+        const cleaned = this.value.replace(/[^A-Za-zА-Яа-яЁё\s]/g, '');
+        if (cleaned !== this.value) this.value = cleaned.slice(0, 35);
+      });
+    }
+
+    form.addEventListener('submit', function(e) {
+      e.preventDefault();
+      errorEl.textContent = '';
+
+      // Get and sanitize values
+      const name = sanitize(form.querySelector('[name="name"]').value, 35);
+      const contact = sanitize(form.querySelector('[name="contact"]').value, 30);
+      const idea = sanitize(form.querySelector('[name="idea"]').value, 200);
+
+      // Server-side-equivalent validation (defense in depth)
+      const namePattern = /^[A-Za-zА-Яа-яЁё\s]{2,35}$/;
+      const contactPattern = /^[A-Za-z0-9@._+\-]{3,30}$/;
+
+      if (!namePattern.test(name)) {
+        errorEl.textContent = 'Имя: только буквы и пробел, 2-35 символов';
+        return;
+      }
+      if (!contactPattern.test(contact)) {
+        errorEl.textContent = 'Контакт: латиница, цифры, @._+-, 3-30 символов';
+        return;
+      }
+      if (idea.length < 5) {
+        errorEl.textContent = 'Опишите идею подробнее (минимум 5 символов)';
+        return;
+      }
+      if (idea.length > 200) {
+        errorEl.textContent = 'Описание слишком длинное (макс. 200 символов)';
+        return;
+      }
+
+      // Check for suspicious patterns (injection attempts)
+      const dangerPatterns = /(<script|<\/script|eval\s*\(|document\.|window\.|fetch\s*\(|XMLHttpRequest)/i;
+      if (dangerPatterns.test(name) || dangerPatterns.test(contact) || dangerPatterns.test(idea)) {
+        errorEl.textContent = 'Обнаружен недопустимый контент';
+        return;
+      }
+
+      // Success — in production, send to backend here
+      form.reset();
+      errorEl.textContent = '';
+      alert('Спасибо! Мы свяжемся с вами в ближайшие часы.');
+    });
   })();
 </script>
 
