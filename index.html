@@ -173,7 +173,6 @@
     padding: 14px 32px;
     border-bottom: 5px solid var(--border);
     background: var(--bg); position: sticky; top: 0; z-index: 100;
-    position: relative;
   }
   nav::after {
     content: "● ● ● ● ● ● ● ● ● ● ● ● ● ● ● ● ● ● ● ●";
@@ -310,7 +309,6 @@
     transform: rotate(0.5deg);
   }
   .hero .alignment-note::before { content: "▣ "; color: var(--accent-2); }
-  .hero .cta-row { display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; }
   .btn-primary {
     display: inline-block;
     font-family: var(--font-mono); font-size: 15px; font-weight: bold;
@@ -342,13 +340,16 @@
     background: var(--accent-3);
   }
   .btn-secondary:active { transform: translate(3px, 3px); box-shadow: 0px 0px 0px var(--border); }
-  .hero .trust-badge {
-    margin-top: 24px;
-    font-family: var(--font-mono); font-size: 13px;
-    color: var(--ink-muted); letter-spacing: 0.5px;
+  .btn-primary {
+    display: inline-block;
+    font-family: var(--font-mono); font-size: 15px; font-weight: bold;
+    letter-spacing: 1px; text-transform: uppercase;
+    background: var(--accent); color: #FFFFFF;
+    border: 3px solid var(--border);
+    box-shadow: var(--shadow);
+    padding: 16px 32px; text-decoration: none;
+    transition: transform 0.1s, box-shadow 0.1s;
   }
-  .hero .trust-badge::before { content: "▣ "; color: var(--accent-2); }
-
   /* ---------- SECTION HEADERS ---------- */
   section { padding: 70px 32px; }
   .section-label {
@@ -453,22 +454,6 @@
     margin-left: 4px;
     vertical-align: text-bottom;
     animation: blink 0.7s step-end infinite;
-  }
-
-  /* ---------- GLITCH ON SCROLL ---------- */
-  .glitch-section {
-    transition: filter 0.1s;
-  }
-  .glitch-section.glitching {
-    animation: glitchSection 0.15s steps(2) forwards;
-  }
-  @keyframes glitchSection {
-    0% { filter: none; transform: translateX(0); }
-    20% { filter: hue-rotate(90deg) saturate(2); transform: translateX(-5px); }
-    40% { filter: hue-rotate(-90deg); transform: translateX(5px) skewX(2deg); }
-    60% { filter: hue-rotate(180deg); transform: translateX(-3px); }
-    80% { filter: none; transform: translateX(2px); }
-    100% { filter: none; transform: translateX(0); }
   }
 
   /* ---------- 3D CARD PERSPECTIVE ---------- */
@@ -777,7 +762,7 @@
 </div>
 
 <!-- SECTION 2: CONTRAST -->
-<section class="glitch-section">
+<section>
   <div class="section-label">// Почему не классическая разработка</div>
   <h2 class="section-title">Классический аутсорсинг умирает.<br>Вот что приходит на смену.</h2>
   <p class="section-desc">Сравните два подхода к одному и тому же проекту. Разница — в скорости, предсказуемости и итоговом счёте.</p>
@@ -810,7 +795,7 @@
 </section>
 
 <!-- SECTION 3: SERVICES & PRICING -->
-<section id="services" class="glitch-section">
+<section id="services">
   <div class="section-label">// Услуги и тарифы</div>
   <h2 class="section-title">Три формата под разные задачи</h2>
   <p class="section-desc">Выберите путь, который соответствует вашему этапу. Каждый пакет — фиксированный срок и предсказуемый результат.</p>
@@ -838,7 +823,7 @@
 </section>
 
 <!-- SECTION 4: TECH STACK & QUALITY -->
-<section class="glitch-section">
+<section>
   <div class="section-label">// Стек и контроль качества</div>
   <h2 class="section-title">Современный стек. Чистый код.<br>Реальная гарантия качества.</h2>
   <p class="section-desc">AI позволяет нам использовать лучшие инструменты без компромиссов. Каждая строка кода проходит аудит, рефакторинг и тестирование перед деплоем.</p>
@@ -861,7 +846,7 @@
 </section>
 
 <!-- SECTION 5: HOW WE WORK -->
-<section class="glitch-section">
+<section>
   <div class="section-label">// Процесс работы</div>
   <h2 class="section-title">От идеи до деплоя за 5 дней</h2>
   <p class="section-desc">Никаких недель молчания и сюрпризов на дедлайне. Прозрачный процесс с live-апдейтами каждый день.</p>
@@ -886,7 +871,7 @@
 </section>
 
 <!-- SECTION 6: FAQ -->
-<section class="glitch-section">
+<section>
   <div class="section-label">// FAQ</div>
   <h2 class="section-title">Честные ответы на частые вопросы</h2>
 
@@ -961,23 +946,32 @@
     if (!el) return;
     const fullText = el.dataset.text;
     const cursor = el.querySelector('.typing-cursor');
-    // Start with empty text + cursor
     el.textContent = '';
     el.appendChild(cursor);
 
-    // Create keyboard click audio
-    const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    let audioCtx = null;
+    function getAudio() {
+      if (!audioCtx) {
+        audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+      }
+      if (audioCtx.state === 'suspended') audioCtx.resume();
+      return audioCtx;
+    }
+
     function playKey() {
-      const osc = audioCtx.createOscillator();
-      const gain = audioCtx.createGain();
-      osc.connect(gain);
-      gain.connect(audioCtx.destination);
-      osc.frequency.value = 800 + Math.random() * 400;
-      osc.type = 'square';
-      gain.gain.value = 0.03;
-      gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.05);
-      osc.start();
-      osc.stop(audioCtx.currentTime + 0.05);
+      try {
+        const ctx = getAudio();
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+        osc.frequency.value = 800 + Math.random() * 400;
+        osc.type = 'square';
+        gain.gain.value = 0.03;
+        gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.05);
+        osc.start();
+        osc.stop(ctx.currentTime + 0.05);
+      } catch(e) { /* silent fail */ }
     }
 
     let i = 0;
@@ -989,8 +983,16 @@
         setTimeout(typeChar, 60 + Math.random() * 40);
       }
     }
-    // Start typing after page load
-    setTimeout(typeChar, 500);
+    // Wait for first user interaction to enable audio
+    function startTyping() {
+      setTimeout(typeChar, 300);
+      document.removeEventListener('click', startTyping);
+      document.removeEventListener('keydown', startTyping);
+      document.removeEventListener('touchstart', startTyping);
+    }
+    document.addEventListener('click', startTyping);
+    document.addEventListener('keydown', startTyping);
+    document.addEventListener('touchstart', startTyping);
   })();
 
   // ========== 3. GLITCH ON SCROLL - REMOVED ==========
