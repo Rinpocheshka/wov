@@ -71,7 +71,7 @@
     background-image:
       repeating-linear-gradient(0deg, transparent, transparent 49px, rgba(0,0,0,0.03) 49px, rgba(0,0,0,0.03) 50px),
       repeating-linear-gradient(90deg, transparent, transparent 49px, rgba(0,0,0,0.03) 49px, rgba(0,0,0,0.03) 50px);
-    pointer-events: none; z-index: 0;
+    pointer-events: none; z-index: -1;
   }
   [data-theme="dark"] body::before {
     background-image:
@@ -602,11 +602,13 @@
     overflow: hidden;
   }
   .footer-cta::before {
-    content: "";
-    position: absolute; top: -50%; left: -50%; width: 200%; height: 200%;
-    background: conic-gradient(from 0deg, transparent, var(--accent), transparent, var(--accent-2), transparent);
-    animation: spin-slow 8s linear infinite;
-    opacity: 0.05;
+    content: "★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★";
+    position: absolute; top: 0; left: 0; right: 0;
+    font-size: 10px; letter-spacing: 12px; line-height: 1;
+    color: var(--accent); opacity: 0.15;
+    pointer-events: none;
+    overflow: hidden;
+    white-space: nowrap;
   }
   .footer-cta h2 {
     font-family: var(--font-mono); font-weight: bold;
@@ -622,6 +624,7 @@
   .cta-form {
     display: grid; grid-template-columns: 1fr 1fr 1.5fr; gap: 12px;
     max-width: 680px; margin: 0 auto;
+    position: relative; z-index: 2;
   }
   .cta-form input, .cta-form textarea {
     background: var(--cta-input-bg);
