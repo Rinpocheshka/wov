@@ -698,10 +698,11 @@
   }
 
   /* ---------- RESPONSIVE ---------- */
+  /* Tablet */
   @media (max-width: 860px) {
     .contrast-table { grid-template-columns: 1fr; }
     .contrast-table .col-vs { writing-mode: horizontal-tb; padding: 14px; }
-    .services-grid { grid-template-columns: 1fr; }
+    .services-grid { grid-template-columns: 1fr; perspective: none; }
     .tech-grid { grid-template-columns: repeat(3, 1fr); }
     .cta-form { grid-template-columns: 1fr; }
     .hero { padding: 48px 20px 40px; }
@@ -710,12 +711,58 @@
     section { padding: 48px 20px; }
     .footer-cta { margin: 0 16px 48px; padding: 48px 20px; }
     nav { padding: 14px 20px; }
-    .logo-text { font-size: 16px; }
+    .logo-text { font-size: 16px; letter-spacing: 1px; }
+    .hero::before, .hero::after { display: none; }
+    .section-title::before { left: -20px; font-size: 12px; }
+    .deco { display: none; }
+    #services .section-desc,
+    #tech .section-desc { max-width: 100%; }
   }
-  }
+  /* Mobile */
   @media (max-width: 520px) {
     .tech-grid { grid-template-columns: repeat(2, 1fr); }
-    .hero h1 { font-size: 26px; }
+    nav { padding: 10px 14px; }
+    nav::after { display: none; }
+    .logo-text { font-size: 13px; letter-spacing: 0; }
+    .logo-img { height: 36px; }
+    .nav-cta { font-size: 11px; padding: 8px 14px; letter-spacing: 1px; }
+    .theme-toggle { width: 40px; height: 40px; font-size: 18px; }
+    .hero { padding: 32px 14px 28px; }
+    .hero-eyebrow { font-size: 10px; padding: 5px 12px; }
+    .hero-line { font-size: clamp(22px, 8vw, 36px); border-bottom-width: 4px; letter-spacing: -0.5px; }
+    .hero-subline { font-size: clamp(20px, 7vw, 32px); margin-bottom: 20px; }
+    .hero .subtitle { font-size: 13px; padding: 10px 12px; }
+    .btn-primary, .btn-secondary { font-size: 13px; padding: 14px 22px; }
+    .hero .alignment-note { font-size: 10px; padding: 5px 10px; }
+    section { padding: 36px 14px; }
+    .section-label { font-size: 10px; }
+    .section-title { font-size: clamp(20px, 6vw, 30px); }
+    .section-title::before { left: -16px; font-size: 10px; }
+    .section-desc { font-size: 14px; }
+    .contrast-table { border-width: 3px; box-shadow: var(--shadow); }
+    .contrast-table li { font-size: 13px; padding: 8px 0; gap: 8px; }
+    .contrast-table h3 { font-size: 12px; }
+    .service-card { padding: 20px 16px; }
+    .service-card h3 { font-size: 17px; }
+    .service-card p { font-size: 13px; }
+    .quality-callout { padding: 20px 16px; flex-direction: column; }
+    .quality-callout h4 { font-size: 15px; }
+    .quality-callout p { font-size: 13px; }
+    .tech-badge { padding: 12px 8px; }
+    .tech-badge strong { font-size: 14px; }
+    .timeline { padding-left: 30px; }
+    .timeline::before { left: 10px; }
+    .timeline-item::before { left: -26px; width: 16px; height: 16px; }
+    .timeline-item h4 { font-size: 15px; }
+    .timeline-item p { font-size: 13px; }
+    .faq-item summary { padding: 16px 16px; font-size: 14px; }
+    .faq-item .faq-answer { padding: 0 16px 16px; font-size: 14px; }
+    .footer-cta { margin: 0 10px 36px; padding: 36px 14px; border-width: 3px; }
+    .footer-cta h2 { font-size: clamp(22px, 7vw, 34px); }
+    .footer-cta p { font-size: 13px; margin-bottom: 24px; }
+    .cta-form input, .cta-form textarea { padding: 12px 14px; font-size: 13px; }
+    .cta-form button { font-size: 14px; padding: 14px 24px; }
+    footer { padding: 20px 14px; font-size: 10px; }
   }
 </style>
 </head>
