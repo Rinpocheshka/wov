@@ -320,6 +320,37 @@
     padding: 16px 32px; text-decoration: none;
     transition: transform 0.1s, box-shadow 0.1s;
   }
+  .btn-primary:hover, .btn-primary:focus {
+    transform: translate(-3px, -3px);
+    box-shadow: 9px 9px 0px var(--border);
+  }
+  .btn-primary:active { transform: translate(3px, 3px); box-shadow: 0px 0px 0px var(--border); }
+  .btn-secondary {
+    display: inline-block;
+    font-family: var(--font-mono); font-size: 15px; font-weight: bold;
+    letter-spacing: 1px; text-transform: uppercase;
+    background: var(--surface); color: var(--ink);
+    border: 3px solid var(--border);
+    box-shadow: var(--shadow);
+    padding: 16px 32px; text-decoration: none;
+    transition: transform 0.1s, box-shadow 0.1s;
+  }
+  .btn-secondary:hover, .btn-secondary:focus {
+    transform: translate(-3px, -3px);
+    box-shadow: 9px 9px 0px var(--border);
+    background: var(--accent-3);
+  }
+  .btn-secondary:active { transform: translate(3px, 3px); box-shadow: 0px 0px 0px var(--border); }
+  .btn-primary {
+    display: inline-block;
+    font-family: var(--font-mono); font-size: 15px; font-weight: bold;
+    letter-spacing: 1px; text-transform: uppercase;
+    background: var(--accent); color: #FFFFFF;
+    border: 3px solid var(--border);
+    box-shadow: var(--shadow);
+    padding: 16px 32px; text-decoration: none;
+    transition: transform 0.1s, box-shadow 0.1s;
+  }
   .btn-primary:hover {
     transform: translate(-3px, -3px);
     box-shadow: 9px 9px 0px var(--border);
@@ -341,36 +372,10 @@
     background: var(--accent-3);
   }
   .btn-secondary:active { transform: translate(3px, 3px); box-shadow: 0px 0px 0px var(--border); }
-  .btn-primary {
-    display: inline-block;
-    font-family: var(--font-mono); font-size: 15px; font-weight: bold;
-    letter-spacing: 1px; text-transform: uppercase;
-    background: var(--accent); color: #FFFFFF;
-    border: 3px solid var(--border);
-    box-shadow: var(--shadow);
-    padding: 16px 32px; text-decoration: none;
-    transition: transform 0.1s, box-shadow 0.1s;
-  }
   /* ---------- SECTION HEADERS ---------- */
   section { padding: 70px 32px; }
   .section-label {
     font-family: var(--font-mono); font-size: 12px; font-weight: bold;
-    letter-spacing: 2px; text-transform: uppercase;
-    color: var(--accent); margin-bottom: 12px;
-    display: block;
-    border-bottom: 3px solid var(--accent);
-    padding-bottom: 4px;
-    position: relative;
-  }
-  .section-label::after {
-    content: "▌";
-    display: inline-block; margin-left: 8px; vertical-align: middle;
-    animation: blink 1s step-end infinite;
-    color: var(--accent);
-  }
-  .section-title {
-    font-family: var(--font-mono); font-weight: bold;
-    font-size: clamp(26px, 4vw, 42px);
     color: var(--ink); line-height: 1.15;
     margin-bottom: 16px; text-transform: uppercase;
     position: relative;
@@ -726,7 +731,8 @@
     .logo-text { font-size: 13px; letter-spacing: 0; }
     .logo-img { height: 36px; }
     .nav-cta { font-size: 11px; padding: 8px 14px; letter-spacing: 1px; }
-    .theme-toggle { width: 40px; height: 40px; font-size: 18px; }
+    .theme-toggle { width: 44px; height: 44px; font-size: 18px; }
+    body { border-right: none; }
     .hero { padding: 32px 14px 28px; }
     .hero-eyebrow { font-size: 10px; padding: 5px 12px; }
     .hero-line { font-size: clamp(22px, 8vw, 36px); border-bottom-width: 4px; letter-spacing: -0.5px; }
@@ -735,7 +741,7 @@
     .btn-primary, .btn-secondary { font-size: 13px; padding: 14px 22px; }
     .hero .alignment-note { font-size: 10px; padding: 5px 10px; }
     section { padding: 36px 14px; }
-    .section-label { font-size: 10px; }
+    .section-label { font-size: 11px; }
     .section-title { font-size: clamp(20px, 6vw, 30px); }
     .section-title::before { left: -16px; font-size: 10px; }
     .section-desc { font-size: 14px; }
@@ -757,12 +763,12 @@
     .timeline-item p { font-size: 13px; }
     .faq-item summary { padding: 16px 16px; font-size: 14px; }
     .faq-item .faq-answer { padding: 0 16px 16px; font-size: 14px; }
-    .footer-cta { margin: 0 10px 36px; padding: 36px 14px; border-width: 3px; }
+    .footer-cta { margin: 0 12px 36px; padding: 36px 14px; border-width: 3px; }
     .footer-cta h2 { font-size: clamp(22px, 7vw, 34px); }
     .footer-cta p { font-size: 13px; margin-bottom: 24px; }
-    .cta-form input, .cta-form textarea { padding: 12px 14px; font-size: 13px; }
-    .cta-form button { font-size: 14px; padding: 14px 24px; }
-    footer { padding: 20px 14px; font-size: 10px; }
+    .cta-form input, .cta-form textarea { padding: 12px 14px; font-size: 13px; min-height: 44px; }
+    .cta-form button { font-size: 14px; padding: 14px 24px; min-height: 44px; }
+    footer { padding: 20px 14px; font-size: 11px; }
   }
 </style>
 </head>
