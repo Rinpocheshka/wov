@@ -753,12 +753,14 @@
   /* Mobile */
   @media (max-width: 520px) {
     .tech-grid { grid-template-columns: repeat(2, 1fr); }
-    nav { padding: 10px 14px; }
+    nav { padding: 10px 12px; }
     nav::after { display: none; }
-    .logo-text { font-size: 13px; letter-spacing: 0; }
-    .logo-img { height: 36px; }
-    .nav-cta { font-size: 11px; padding: 8px 14px; letter-spacing: 1px; }
-    .theme-toggle { width: 44px; height: 44px; font-size: 18px; }
+    .logo-group { gap: 10px; }
+    .logo-text { font-size: 12px; letter-spacing: 0; white-space: nowrap; }
+    .logo-img { height: 30px; }
+    .nav-right { gap: 8px; }
+    .nav-cta { font-size: 10px; padding: 7px 9px; letter-spacing: 0; white-space: nowrap; }
+    .theme-toggle { width: 40px; height: 40px; font-size: 16px; }
     body { border-right: none; }
     .hero { padding: 32px 14px 28px; }
     .hero-eyebrow { font-size: 10px; padding: 5px 12px; }
@@ -796,6 +798,12 @@
     .cta-form input, .cta-form textarea { padding: 12px 14px; font-size: 13px; min-height: 44px; }
     .cta-form button { font-size: 14px; padding: 14px 24px; min-height: 44px; }
     footer { padding: 20px 14px; font-size: 11px; }
+  }
+  /* Small phones */
+  @media (max-width: 360px) {
+    nav { padding: 10px 10px; }
+    .logo-img { height: 28px; }
+    .logo-text { font-size: 11px; }
   }
 </style>
 </head>
