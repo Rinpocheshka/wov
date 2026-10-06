@@ -1182,6 +1182,7 @@
       showError('');
       if (okEl) okEl.classList.remove('show');
 
+      // Данные дублируются в message: так письмо остаётся читаемым в любом шаблоне FormSubmit.
       const payload = {
         _subject: 'Новая заявка с сайта World of Vibecraft',
         _template: 'table',
@@ -1189,7 +1190,7 @@
         _honey: '',
         name: data.name,
         contact: data.contact,
-        message: data.idea
+        message: 'Имя: ' + data.name + '\nКонтакт: ' + data.contact + '\n\nИдея проекта:\n' + data.idea
       };
       // Если контакт похож на email — ставим Reply-To, чтобы ответить в один клик.
       if (/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(data.contact)) payload._replyto = data.contact;
@@ -1197,8 +1198,8 @@
       try {
         const res = await fetch('https://formsubmit.co/ajax/your@email.com', {
           method: 'POST',
-          headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
-          body: JSON.stringify(payload)
+          headers: { 'Content-Type': 'application/x-www-form-urlencoded', 'Accept': 'application/json' },
+          body: new URLSearchParams(payload).toString()
         });
         const json = await res.json().catch(() => ({}));
         if (!res.ok || json.success === false) {
