@@ -1157,10 +1157,10 @@
     const okEl = document.getElementById('formOk');
     if (!form) return;
 
-    let firstInteractionAt = Date.now();
-    ['focusin', 'input', 'change'].forEach(function(evt) {
-      form.addEventListener(evt, function() { firstInteractionAt = Date.now(); });
-    });
+    // Антибот: заявка раньше чем через 1.5 с после загрузки страницы — бот.
+    // Таймер не сбрасывается при вводе, иначе он ловит обычных людей,
+    // которые дописали текст и сразу нажали Enter.
+    const pageReadyAt = Date.now();
 
     function showOk() {
       if (!okEl) return;
@@ -1270,7 +1270,7 @@
 
     // Honeypot filled or submitted faster than a human = бот. Молча имитируем успех.
     const honey = form.querySelector('[name="_honey"]');
-    const tooFast = Date.now() - firstInteractionAt < 1500;
+    const tooFast = Date.now() - pageReadyAt < 1500;
     if ((honey && honey.value) || tooFast) {
       form.reset();
       showOk();
