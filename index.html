@@ -672,8 +672,9 @@
     outline: none; transition: border-color 0.2s;
     resize: vertical;
     line-height: 1.4;
+    height: 112px;
   }
-  .cta-form textarea { padding-top: calc(14px + 1.4em); }
+  .cta-form textarea { padding-top: calc((112px - 6px - 1.4em) / 2); }
   .cta-form input::placeholder, .cta-form textarea::placeholder { color: var(--cta-text); opacity: 0.4; }
   .cta-form input:focus, .cta-form textarea:focus { border-color: var(--accent); }
   .cta-form input:invalid:not(:placeholder-shown), .cta-form textarea:invalid:not(:placeholder-shown) {
@@ -733,6 +734,8 @@
     .services-grid { grid-template-columns: 1fr; perspective: none; }
     .tech-grid { grid-template-columns: repeat(3, 1fr); }
     .cta-form { grid-template-columns: 1fr; }
+    .cta-form input, .cta-form textarea { height: auto; }
+    .cta-form textarea { padding-top: 14px; }
     .hero { padding: 48px 20px 40px; }
     .hero-line { font-size: clamp(24px, 7vw, 48px); border-bottom-width: 4px; padding-bottom: 4px; }
     .hero-subline { font-size: clamp(22px, 6vw, 40px); }
