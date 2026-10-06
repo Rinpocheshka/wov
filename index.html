@@ -984,7 +984,7 @@
   <h2>Хватит планировать.<br>Пора деплоить.</h2>
   <p>Расскажите о вашей идее — ответим в течение 2 часов, предложим план и смету.</p>
   <form class="cta-form" id="leadForm" novalidate
-        action="https://formsubmit.co/your@email.com" method="POST">
+        action="https://formsubmit.co/9fbacc4d0b3cb5989a59ed52a1e83b24" method="POST">
     <input type="hidden" name="_subject" value="Новая заявка с сайта World of Vibecraft">
     <input type="hidden" name="_template" value="table">
     <input type="hidden" name="_captcha" value="false">
@@ -1201,7 +1201,7 @@
       if (/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(data.contact)) payload._replyto = data.contact;
 
       try {
-        const res = await fetch('https://formsubmit.co/ajax/your@email.com', {
+        const res = await fetch('https://formsubmit.co/ajax/9fbacc4d0b3cb5989a59ed52a1e83b24', {
           method: 'POST',
           headers: { 'Content-Type': 'application/x-www-form-urlencoded', 'Accept': 'application/json' },
           body: new URLSearchParams(payload).toString()
@@ -1213,7 +1213,7 @@
         form.reset();
         showOk();
       } catch (err) {
-        showError('Не удалось отправить заявку. Напишите нам на your@email.com');
+        showError('Не удалось отправить заявку. Обновите страницу и попробуйте ещё раз.');
       } finally {
         if (btn) { btn.disabled = false; btn.textContent = originalLabel; }
       }
