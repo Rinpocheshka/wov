@@ -671,7 +671,9 @@
     font-family: var(--font-mono); font-size: 14px; color: var(--cta-text);
     outline: none; transition: border-color 0.2s;
     resize: vertical;
+    line-height: 1.4;
   }
+  .cta-form textarea { padding-top: calc(14px + 1.4em); }
   .cta-form input::placeholder, .cta-form textarea::placeholder { color: var(--cta-text); opacity: 0.4; }
   .cta-form input:focus, .cta-form textarea:focus { border-color: var(--accent); }
   .cta-form input:invalid:not(:placeholder-shown), .cta-form textarea:invalid:not(:placeholder-shown) {
@@ -999,7 +1001,7 @@
     <input type="text" name="contact" placeholder="Telegram или Email" maxlength="30" required
            pattern="^[A-Za-z0-9@._+\-]{1,30}$" title="Латинские буквы, цифры, символы @._+-, до 30 символов"
            autocomplete="off" spellcheck="false">
-    <textarea name="idea" placeholder="Коротко опишите идею" maxlength="200" required
+    <textarea name="idea" placeholder="Кратко опишите идею" maxlength="200" required
               rows="3" autocomplete="off" spellcheck="false"></textarea>
     <button type="submit">Отправить заявку →</button>
     <div class="form-error" id="formError" role="alert"></div>
