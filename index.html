@@ -7,7 +7,7 @@
      и отправка формы на formsubmit.co. frame-ancestors в meta не работает —
      защиту от встраивания в чужой iframe задаёт только заголовок, а GitHub Pages
      свои заголовки не отдаёт. -->
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; base-uri 'self'; object-src 'none'; frame-src 'none'; img-src 'self' data:; font-src 'self' data:; media-src 'self' data:; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline'; connect-src 'self' https://formsubmit.co; form-action 'self' https://formsubmit.co; upgrade-insecure-requests">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; base-uri 'self'; object-src 'none'; frame-src 'none'; img-src 'self' data:; font-src 'self' data:; media-src 'self' data:; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline'; connect-src 'self' https://briefops.onrender.com; form-action 'self' https://briefops.onrender.com; upgrade-insecure-requests">
 <title>World of Vibecraft — Разработка со скоростью мысли</title>
 <link rel="icon" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAfklEQVR4nO3USw7AIAgEUA7a+1/Dbpv0MwwQpxoWbJTKi81o47ChLGvA7wBm90L7TG8D1gd8IUJnLQl46vP0NKAUcO1F+/sCUO0PkP4CaQqkL+HbcG9vCpBdTwHY6y4FsKlgvqUBkeyXAdDwyBlugHc4HdVIdjMICJhdDZADTijLhd4UeBZpAAAAAElFTkSuQmCC">
 <style>
@@ -998,16 +998,10 @@
   <h2>Хватит планировать.<br>Пора деплоить.</h2>
   <p>Расскажите о вашей идее — ответим в течение 2 часов, предложим план и смету.</p>
   <form class="cta-form" id="leadForm" novalidate
-        action="https://formsubmit.co/9fbacc4d0b3cb5989a59ed52a1e83b24" method="POST">
-    <input type="hidden" name="_subject" value="Новая заявка с сайта World of Vibecraft">
-    <input type="hidden" name="_template" value="table">
-    <input type="hidden" name="_webhook" value="https://briefops.onrender.com/api/integrations/wov">
+        action="https://briefops.onrender.com/api/integrations/wov" method="POST">
     <input type="hidden" name="form_id" value="wov-v1">
     <input type="hidden" name="site_url" value="https://rinpocheshka.github.io/wov/">
     <input type="hidden" name="submission_id" value="">
-    <input type="hidden" name="_captcha" value="false">
-    <input type="hidden" name="_blacklist" value="crypto, casino, кредит, займ, казино, ставки, seo услуги, buy followers, viagra">
-    <input type="hidden" name="_next" value="https://rinpocheshka.github.io/wov/?sent=1#cta">
     <div class="hp-field" aria-hidden="true">
       <label>Не заполняйте это поле<input type="text" name="_honey" tabindex="-1" autocomplete="off"></label>
     </div>
@@ -1208,34 +1202,26 @@
       showError('');
       if (okEl) okEl.classList.remove('show');
 
-      // Данные дублируются в message: так письмо остаётся читаемым в любом шаблоне FormSubmit.
-      const payload = {
-        _subject: 'Новая заявка с сайта World of Vibecraft',
-        _template: 'table',
-        _captcha: 'false',
-        _honey: '',
-        _blacklist: form.querySelector('[name="_blacklist"]').value,
-        _webhook: 'https://briefops.onrender.com/api/integrations/wov',
+      // Сначала BriefOps сохраняет заявку, затем отправляет уведомление владельцу.
+      const payload = {form_data: {
         form_id: 'wov-v1',
         site_url: 'https://rinpocheshka.github.io/wov/',
         submission_id: submissionField.value,
-        idea: data.idea,
         name: data.name,
         contact: data.contact,
-        message: 'Имя: ' + data.name + '\nКонтакт: ' + data.contact + '\n\nИдея проекта:\n' + data.idea
-      };
-      // Если контакт похож на email — ставим Reply-To, чтобы ответить в один клик.
-      if (/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(data.contact)) payload._replyto = data.contact;
+        idea: data.idea,
+        _honey: ''
+      }};
 
       try {
-        const res = await fetch('https://formsubmit.co/ajax/9fbacc4d0b3cb5989a59ed52a1e83b24', {
+        const res = await fetch('https://briefops.onrender.com/api/integrations/wov', {
           method: 'POST',
-          headers: { 'Content-Type': 'application/x-www-form-urlencoded', 'Accept': 'application/json' },
-          body: new URLSearchParams(payload).toString()
+          headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+          body: JSON.stringify(payload)
         });
         const json = await res.json().catch(() => ({}));
-        if (!res.ok || json.success === false || json.success === 'false') {
-          throw new Error(json.message || ('HTTP ' + res.status));
+        if (!res.ok || json.accepted !== true) {
+          throw new Error(json.error || ('HTTP ' + res.status));
         }
         form.reset();
         newSubmission();
